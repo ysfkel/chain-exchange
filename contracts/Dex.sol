@@ -2,31 +2,7 @@ pragma solidity >=0.4.22 <0.8.0;
 
 import "@OpenZeppelin/contracts/token/ERC20/IERC20.sol";
 
-/**
-  Featurs
-  1. Token registry: registers a list of supported tokens 
-  2. Wallet: manages a wallet which tracks users ether
 
-  3. DAI integration; when you trade financial assets , you will always have a 
-      base currency as well as a quote currency, the price of the base currency is 
-      given in terms of the quote currency 
-      eg the pair EUR/USD is 1.2 means you need to pay 1.2 USD to get 1 EUR where USD is the quote currency
-      in the past for most exchanges, the quote curency was ether, 
-      however , Eth is very volatile , so its not ideal as a quote currency ,
-      instead we want to have something stable
-
-      DAi is ony available on the mainnet or public testnets ,
-      so to use DAI we will create a fake DAI
-  
-  4. Limit Order:
-     A limit order is a buy or sell order with a limit price 
-     For a buy order , the limit will be a maximum price 
-     For a sell order , the limit will be a minimum price 
-
-  5. Order
-           
-      
- */
 contract Dex {
 
     enum Side {
@@ -39,35 +15,22 @@ contract Dex {
         Side side;
         //ticker of token to buy or sell
         bytes32 ticker;
-        uint amount;
-        //how much of the order was filled
-        //an order can be partiallt filled, 
-        //forinstance if order amount is 100 at order 
-        //creation, filled will be equal 0
-        //if a market oder matches this order for only 
-        //50 , then filled will be 50, once flled 
-        //becomes 100 by subsequent market orders 
-        ///then the order will be complete
+        uint amount; 
         uint filled;
         uint price;
         uint date;
     }
     
-    struct Token {
-        //we use bytes32 because 
-        //string are not easy to manipulate
+    struct Token { 
         bytes32 ticker;
         address tokenAddress;
     }
 
     mapping(bytes32 => Token) public tokens;
     bytes32[] public tokenList; 
-    address public admin; 
-    //order book. 
-    //mapping of ticker to mapping of Side(buy or sell) to
-    // order array sorted by best price
+    address public admin;  
     mapping(bytes32 => mapping(uint => Order[])) public orderBook;
-    //tracks the next order
+ 
     uint public nextOrderID;
     //Wallet
     mapping(address => mapping(bytes32 => uint)) public traderBalances;
